@@ -1,5 +1,6 @@
 package com.buuz135.soulplied_energistics.applied;
 
+
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 import com.buuz135.soulplied_energistics.SoulpliedEnergistics;
@@ -21,6 +22,7 @@ import java.util.List;
 public class SoulKey extends AEKey {
 
     public static ResourceLocation RL = ResourceLocation.fromNamespaceAndPath(SoulpliedEnergistics.MODID, "soulkey");
+    public static SoulKey INSTANCE = new SoulKey();
 
     public static final MapCodec<SoulKey> MAP_CODEC = RecordCodecBuilder.mapCodec(
             builder -> builder
@@ -29,6 +31,9 @@ public class SoulKey extends AEKey {
     );
     public static final Codec<SoulKey> CODEC = MAP_CODEC.codec();
 
+    private SoulKey(){
+
+    }
 
     @Override
     public AEKeyType getType() {

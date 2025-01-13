@@ -112,7 +112,7 @@ dependencies {
     implementation "curse.maven:titanium-287342:5897690"
     implementation "curse.maven:industrial-foregoing-266515:5866238"
     implementation "curse.maven:industrial-foregoing-souls-904394:5962885"
-    implementation  "appeng:appliedenergistics2:19.0.23-beta"
+    implementation  "appeng:appliedenergistics2:19.0.27"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

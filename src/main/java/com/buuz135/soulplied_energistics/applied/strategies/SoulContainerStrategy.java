@@ -17,7 +17,7 @@ public class SoulContainerStrategy implements ContainerItemStrategy<SoulKey, Ite
     @Override
     public @Nullable GenericStack getContainedStack(ItemStack itemStack) {
         if (BuiltInRegistries.ITEM.getKey(itemStack.getItem()).getNamespace().equals("industrialforegoingsouls")){
-            return new GenericStack(new SoulKey(), 5);
+            return new GenericStack(SoulKey.INSTANCE, 5);
         }
         return null;
     }

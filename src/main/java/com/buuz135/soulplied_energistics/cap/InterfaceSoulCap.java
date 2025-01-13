@@ -43,7 +43,7 @@ public class InterfaceSoulCap implements ISoulHandler {
             return 0;
         }
         for (int i = 0; i < this.blockEntity.size(); i++) {
-            var amount = this.blockEntity.extract(i, new SoulKey(), maxDrain, Actionable.of(action == Action.EXECUTE ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE));
+            var amount = this.blockEntity.extract(i, SoulKey.INSTANCE, maxDrain, Actionable.of(action == Action.EXECUTE ? IFluidHandler.FluidAction.EXECUTE : IFluidHandler.FluidAction.SIMULATE));
             if (amount > 0) {
                 return (int) amount;
             }

@@ -56,7 +56,7 @@ public class SoulExternalStorageStrategy implements ExternalStorageStrategy {
         @Override
         public void getAvailableStacks(KeyCounter out) {
             for (int i = 0; i < baseBlock.getSoulTanks(); i++) {
-                out.add(new SoulKey(), baseBlock.getSoulInTank(i));
+                out.add(SoulKey.INSTANCE, baseBlock.getSoulInTank(i));
             }
         }
 

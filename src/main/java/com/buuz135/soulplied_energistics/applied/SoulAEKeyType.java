@@ -24,7 +24,7 @@ public class SoulAEKeyType extends AEKeyType {
 
     @Override
     public @Nullable AEKey readFromPacket(RegistryFriendlyByteBuf registryFriendlyByteBuf) {
-        return new SoulKey();
+        return SoulKey.INSTANCE;
     }
 
     @Override
