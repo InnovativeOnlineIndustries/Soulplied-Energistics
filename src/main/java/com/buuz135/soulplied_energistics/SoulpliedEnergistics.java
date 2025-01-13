@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -61,7 +62,7 @@ public class SoulpliedEnergistics {
                 AppliedHelper.INSTANCE.runRegister();
             }
         });
-        EventManager.mod(RegisterCapabilitiesEvent.class).process(event -> {
+        EventManager.mod(RegisterCapabilitiesEvent.class, EventPriority.LOWEST).process(event -> {
             for (var block : BuiltInRegistries.BLOCK) {
                 if (event.isBlockRegistered(AECapabilities.GENERIC_INTERNAL_INV, block)) {
                     event.registerBlock(SoulCapabilities.BLOCK, (level, pos, state, tile, side) -> {
