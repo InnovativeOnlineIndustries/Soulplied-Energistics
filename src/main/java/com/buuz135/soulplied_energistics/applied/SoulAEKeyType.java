@@ -31,4 +31,9 @@ public class SoulAEKeyType extends AEKeyType {
     public int getAmountPerByte() {
         return 1;
     }
+
+    @Override
+    public @Nullable String getUnitSymbol() {
+        return "s";
+    }
 }

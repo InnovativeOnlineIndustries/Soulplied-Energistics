@@ -21,7 +21,7 @@ public class AppliedHelper {
 
     public void runRegister() {
         AEKeyTypes.register(SoulAEKeyType.TYPE);
-        GenericSlotCapacities.register(SoulAEKeyType.TYPE, 256L);
+        GenericSlotCapacities.register(SoulAEKeyType.TYPE, 16L);
         ContainerItemStrategy.register(SoulAEKeyType.TYPE, SoulKey.class, new SoulContainerStrategy());
     }
 
