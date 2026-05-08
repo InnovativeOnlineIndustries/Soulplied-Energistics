@@ -30,13 +30,30 @@ public class SoulExternalStorageStrategy implements ExternalStorageStrategy {
     @Override
     public @Nullable MEStorage createWrapper(boolean b, Runnable runnable) {
         var cap = this.level.getCapability(SoulCapabilities.BLOCK, fromPos, fromSide);
-        if (cap != null){
-            return new SoulLaserDrillMEStorage(cap);
+        if (cap != null) {
+            return new SoulLaserDrillMEStorage(cap, this.level, this.fromPos, this.fromSide, runnable);
         }
+        runnable.run();
         return null;
     }
 
-    private record SoulLaserDrillMEStorage(ISoulHandler baseBlock) implements MEStorage {
+    private static class SoulLaserDrillMEStorage implements MEStorage {
+
+        private final ServerLevel level;
+        private final BlockPos pos;
+        private final Direction side;
+        private final Runnable onChange;
+
+        SoulLaserDrillMEStorage(ISoulHandler baseBlock, ServerLevel level, BlockPos pos, Direction side, Runnable onChange) {
+            this.level = level;
+            this.pos = pos;
+            this.side = side;
+            this.onChange = onChange;
+        }
+
+        private ISoulHandler getCap() {
+            return this.level.getCapability(SoulCapabilities.BLOCK, pos, side);
+        }
 
         @Override
         public boolean isPreferredStorageFor(AEKey what, IActionSource source) {
@@ -45,18 +62,24 @@ public class SoulExternalStorageStrategy implements ExternalStorageStrategy {
 
         @Override
         public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-            return baseBlock.fill((int) amount, mode.isSimulate() ? ISoulHandler.Action.SIMULATE : ISoulHandler.Action.EXECUTE);
+            var cap = getCap();
+            if (cap == null) { onChange.run(); return 0; }
+            return cap.fill((int) amount, mode.isSimulate() ? ISoulHandler.Action.SIMULATE : ISoulHandler.Action.EXECUTE);
         }
 
         @Override
         public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
-            return baseBlock.drain((int) amount, mode.isSimulate() ? ISoulHandler.Action.SIMULATE : ISoulHandler.Action.EXECUTE);
+            var cap = getCap();
+            if (cap == null) { onChange.run(); return 0; }
+            return cap.drain((int) amount, mode.isSimulate() ? ISoulHandler.Action.SIMULATE : ISoulHandler.Action.EXECUTE);
         }
 
         @Override
         public void getAvailableStacks(KeyCounter out) {
-            for (int i = 0; i < baseBlock.getSoulTanks(); i++) {
-                out.add(SoulKey.INSTANCE, baseBlock.getSoulInTank(i));
+            var cap = getCap();
+            if (cap == null) { onChange.run(); return; }
+            for (int i = 0; i < cap.getSoulTanks(); i++) {
+                out.add(SoulKey.INSTANCE, cap.getSoulInTank(i));
             }
         }
 

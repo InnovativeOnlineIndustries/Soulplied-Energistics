@@ -1,0 +1,6 @@
+{
+  "soulkey.name": "ウォーデンの魂",
+  "soulkey.description": "魂",
+  "soulpliedenergistics.can_be_used_filter":  "*AE2インターフェースで魂を要求するために使用できます*",
+  "soulpliedenergistics.storage_bus":  "*ソウルは上部のAE2ストレージバスからアクセスできます*"
+}

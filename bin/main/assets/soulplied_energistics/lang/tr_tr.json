@@ -1,0 +1,6 @@
+{
+  "soulkey.name": "Muhafız Ruhu",
+  "soulkey.description": "Ruhlar",
+  "soulpliedenergistics.can_be_used_filter": "*AE2 Arayüzünde ruh istemek için kullanılabilir*",
+  "soulpliedenergistics.storage_bus": "*Ruhlara üst taraftaki bir AE2 Depolama Veriyolu kullanılarak erişilebilir*"
+}
