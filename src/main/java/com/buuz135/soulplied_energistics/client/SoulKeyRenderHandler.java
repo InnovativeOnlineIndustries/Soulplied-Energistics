@@ -11,8 +11,11 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -83,8 +86,79 @@ public class SoulKeyRenderHandler implements AEKeyRenderHandler<SoulKey> {
     }
 
     @Override
-    public void drawOnBlockFace(PoseStack poseStack, MultiBufferSource multiBufferSource, SoulKey soulKey, float v, int i, Level level) {
+    public void drawOnBlockFace(PoseStack poseStack, MultiBufferSource buffers, SoulKey soulKey, float scale,
+                                int combinedLight, Level level) {
+        var wardenTex = ResourceLocation.withDefaultNamespace("textures/entity/warden/warden.png");
+        var heartTex = ResourceLocation.withDefaultNamespace("textures/entity/warden/warden_heart.png");
 
+        poseStack.pushPose();
+        poseStack.translate(0, 0, 0.01f);
+
+        // Warden head sprite is at u=12..28, v=14..30 in 128x128 atlas
+        var headU0 = 12f / 128f;
+        var headV0 = 14f / 128f;
+        var headU1 = 28f / 128f;
+        var headV1 = 30f / 128f;
+
+        // Warden heart sprite is at u=11..29, v=13..31 in 128x128 atlas
+        var heartU0 = 11f / 128f;
+        var heartV0 = 13f / 128f;
+        var heartU1 = 29f / 128f;
+        var heartV1 = 31f / 128f;
+
+        var faceScale = scale - 0.05f;
+        var heartScale = faceScale * 1.12f;
+
+        // Pulsing heart layer (behind the head)
+        long gameTime = level != null ? level.getGameTime() : 0L;
+        float heartPulse = 1f - ((gameTime % 30L) / 30f);
+        int heartAlpha = Mth.clamp((int) (heartPulse * 255f), 0, 255);
+        int heartColor = (heartAlpha << 24) | 0xFFFFFF;
+
+        drawQuad(poseStack, buffers.getBuffer(RenderType.entityTranslucent(heartTex)),
+                heartScale, heartU0, heartV0, heartU1, heartV1, heartColor, combinedLight);
+
+        // Warden head on top
+        poseStack.translate(0, 0, 0.005f);
+        drawQuad(poseStack, buffers.getBuffer(RenderType.entityCutoutNoCull(wardenTex)),
+                faceScale, headU0, headV0, headU1, headV1, 0xFFFFFFFF, combinedLight);
+
+        poseStack.popPose();
+    }
+
+    private static void drawQuad(PoseStack poseStack, com.mojang.blaze3d.vertex.VertexConsumer buffer,
+                                 float size, float u0, float v0, float u1, float v1,
+                                 int color, int combinedLight) {
+        var x0 = -size / 2f;
+        var y0 = size / 2f;
+        var x1 = size / 2f;
+        var y1 = -size / 2f;
+        var transform = poseStack.last().pose();
+
+        buffer.addVertex(transform, x0, y1, 0)
+                .setColor(color)
+                .setUv(u0, v1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(combinedLight)
+                .setNormal(0, 0, 1);
+        buffer.addVertex(transform, x1, y1, 0)
+                .setColor(color)
+                .setUv(u1, v1)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(combinedLight)
+                .setNormal(0, 0, 1);
+        buffer.addVertex(transform, x1, y0, 0)
+                .setColor(color)
+                .setUv(u1, v0)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(combinedLight)
+                .setNormal(0, 0, 1);
+        buffer.addVertex(transform, x0, y0, 0)
+                .setColor(color)
+                .setUv(u0, v0)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(combinedLight)
+                .setNormal(0, 0, 1);
     }
 
     @Override

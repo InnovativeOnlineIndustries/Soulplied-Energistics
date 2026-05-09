@@ -27,7 +27,7 @@ public class SoulKey extends AEKey {
     public static final MapCodec<SoulKey> MAP_CODEC = RecordCodecBuilder.mapCodec(
             builder -> builder
                     .group(Codec.STRING.fieldOf("uhhh_idk").forGetter(o -> ""))
-                    .apply(builder, t1 -> new SoulKey())
+                    .apply(builder, t1 -> SoulKey.INSTANCE)
     );
     public static final Codec<SoulKey> CODEC = MAP_CODEC.codec();
 
@@ -53,7 +53,8 @@ public class SoulKey extends AEKey {
 
     @Override
     public Object getPrimaryKey() {
-        return this;
+        // KeyCounter indexes by primaryKey using identity (==); must be stable across instances.
+        return SoulKey.class;
     }
 
     @Override
@@ -90,5 +91,11 @@ public class SoulKey extends AEKey {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof SoulKey;
+    }
+
+    @Override
+    public int hashCode() {
+        // Constant to honor the equals/hashCode contract — all SoulKey instances are equal.
+        return SoulKey.class.hashCode();
     }
 }
