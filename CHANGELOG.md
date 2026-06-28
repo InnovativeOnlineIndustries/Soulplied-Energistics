@@ -1,3 +1,9 @@
+# Version 1.0.3
+
+* ru_ru.json add Russian language - name1es-s
+* Feat: PT_BR localization - PrincessStellar
+* Fixed issue that sometimes will appear multiple SoulKey instances - Frostbite-time
+
 # Version 1.0.2
 
 * Reduced the amount of souls that can be stored in an interface
