@@ -27,7 +27,7 @@ public class SoulKey extends AEKey {
     public static final MapCodec<SoulKey> MAP_CODEC = RecordCodecBuilder.mapCodec(
             builder -> builder
                     .group(Codec.STRING.fieldOf("uhhh_idk").forGetter(o -> ""))
-                    .apply(builder, t1 -> new SoulKey())
+                    .apply(builder, t1 -> INSTANCE)
     );
     public static final Codec<SoulKey> CODEC = MAP_CODEC.codec();
 
@@ -86,6 +86,11 @@ public class SoulKey extends AEKey {
         return false;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return SoulKey.class.hashCode();
+    }
 
     @Override
     public boolean equals(Object obj) {
